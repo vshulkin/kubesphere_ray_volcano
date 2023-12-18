@@ -1,0 +1,45 @@
+apiVersion: kubekey.kubesphere.io/v1alpha2
+kind: Cluster
+metadata:
+  name: sample
+spec:
+  hosts: 
+  ##You should complete the ssh information of the hosts
+  - {name: azvmms-node-control-plane, address: 192.168.16.3, internalAddress: 192.168.16.3}
+  - {name: azvmms-node-worker, address: 192.168.16.5, internalAddress: 192.168.16.5}
+  - {name: azvmms-node-worker2, address: 192.168.16.4, internalAddress: 192.168.16.4}
+  - {name: azvmms-node-worker3, address: 192.168.16.2, internalAddress: 192.168.16.2}
+  - {name: azvmms-node-worker4, address: 192.168.16.5, internalAddress: 192.168.16.5}
+  roleGroups:
+    etcd:
+    - azvmms-node-control-plane
+    master:
+    - azvmms-node-control-plane
+    worker:
+    - azvmms-node-control-plane
+    - azvmms-node-worker
+    - azvmms-node-worker2
+    - azvmms-node-worker3
+    - azvmms-node-worker4
+  controlPlaneEndpoint:
+    ##Internal loadbalancer for apiservers
+    #internalLoadbalancer: haproxy
+
+    ##If the external loadbalancer was used, 'address' should be set to loadbalancer's ip.
+    domain: azvmms-node-control-plane
+    address: ""
+    port: 6443
+  kubernetes:
+    version: v1.27.3
+    clusterName: azvmms-node
+    proxyMode: iptables
+    masqueradeAll: false
+    maxPods: 110
+    nodeCidrMaskSize: 24
+  network:
+    plugin: 
+    kubePodsCIDR: 10.244.0.0/16
+    kubeServiceCIDR: 10.96.0.0/16
+  registry:
+    privateRegistry: ""
+
