@@ -1,5 +1,19 @@
 #kind create cluster --name=azvmms-node --config=cluster-config-yaml.yaml
 
+#kind create cluster --config=cluster-config-yaml.yaml
+
+#helm --namespace prometheus-system install prometheus prometheus-community/kube-prometheus-stack --create-namespace --version 48.2.1 -f overrides.yaml
+#cd prometheus
+#kubectl apply -f podMonitor.yaml
+#kubectl apply -f rules
+#kubectl apply -f serviceMonitor.yaml
+
+helm repo add kuberay https://ray-project.github.io/kuberay-helm/
+helm repo update
+helm install kuberay-operator kuberay/kuberay-operator --version 1.0.0 --enable-batch-scheduler
+kubectl get pods
+
+
 # Create metalLB LoadBalancer
 #kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.7/config/manifests/metallb-native.yaml
 #kubectl apply -f metallb-config.yaml 
@@ -19,7 +33,7 @@
 #helm repo update
 #helm install kuberay-operator kuberay/kuberay-operator --version 1.0.0
 
-helm install raycluster kuberay/ray-cluster --version 1.0.0
+#helm install raycluster kuberay/ray-cluster --version 1.0.0
 
 
 
